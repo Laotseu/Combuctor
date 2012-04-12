@@ -268,17 +268,18 @@ function ItemSlot:SetBorderQuality(quality)
 
 	if self:HighlightingQuestItems() then
 		local isQuestItem, isQuestStarter = self:IsQuestItem()
+		if isQuestStarter then
+			qBorder:SetTexture(TEXTURE_ITEM_QUEST_BANG)
+			qBorder:Show()
+			--return
+		end
+
 		if isQuestItem then
 			border:SetVertexColor(1, .82, .2,  self:GetHighlightAlpha())
 			border:Show()
 			return
 		end
 
-		if isQuestStarter then
-			qBorder:SetTexture(TEXTURE_ITEM_QUEST_BANG)
-			qBorder:Show()
-			return
-		end
 	end
 	
 	local link = select(7, self:GetInfo())
@@ -384,7 +385,7 @@ function ItemSlot:HighlightingQuestItems()
 end
 
 function ItemSlot:GetHighlightAlpha()
-	return 0.5
+	return 0.9
 end
 
 local QUEST_ITEM_SEARCH = string.format('t:%s|%s', select(10, GetAuctionItemClasses()), 'quest')
@@ -398,7 +399,7 @@ function ItemSlot:IsQuestItem()
 		return ItemSearch:Find(itemLink, QUEST_ITEM_SEARCH), false
 	else
 		local isQuestItem, questID, isActive = GetContainerItemQuestInfo(self:GetBag(), self:GetID())
-		return isQuestItem, (questID and not isActive)
+		return (isQuestItem or questID), (questID and not isActive)
 	end
 end
 
