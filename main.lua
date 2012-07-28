@@ -3,22 +3,20 @@
 		Some sort of crazy visual inventory management system
 --]]
 
-local AddonName, Addon = ...
-
-LibStub('AceAddon-3.0'):NewAddon(Addon, AddonName, 'AceEvent-3.0', 'AceConsole-3.0')
+local ADDON, Addon = ...
+_G[ADDON] = LibStub('AceAddon-3.0'):NewAddon(Addon, ADDON, 'AceEvent-3.0', 'AceConsole-3.0')
 Addon.__call = Addon.GetModule
 setmetatable(Addon, Addon)
 
 
 --[[ Constants ]]--
 
-local L = LibStub('AceLocale-3.0'):GetLocale(AddonName)
-local CURRENT_VERSION = GetAddOnMetadata(AddonName, 'Version')
+local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
+local CURRENT_VERSION = GetAddOnMetadata(ADDON, 'Version')
 
-BINDING_HEADER_COMBUCTOR = AddonName
+BINDING_HEADER_COMBUCTOR = ADDON
 BINDING_NAME_COMBUCTOR_TOGGLE_INVENTORY = L.ToggleInventory
 BINDING_NAME_COMBUCTOR_TOGGLE_BANK = L.ToggleBank
-_G[AddonName] = Addon
 
 
 --[[
@@ -54,6 +52,7 @@ function Addon:OnInitialize()
 	
 	-- base set
 	self('Sets'):Register(L.All, 'Interface/Icons/INV_Misc_EngGizmos_17', function() return true end)
+	self:HookTooltips()
 end
 
 function Addon:InitDB()
@@ -145,6 +144,20 @@ function Addon:GetBaseProfile()
 end
 
 function Addon:UpdateSettings(major, minor, bugfix)
+	-- Remove keyring
+	if major < '4' or minor < '3' or bugfix < '9' then
+		for char, prefs in pairs(CombuctorDB2.profiles) do
+			local bags = prefs.inventory and prefs.inventory.bags
+			
+			if bags then
+				for i, bag in ipairs(bags) do
+					if bag == -2 then
+						tremove(bags, i)
+					end
+				end
+			end
+		end
+	end
 end
 
 function Addon:UpdateVersion()
@@ -262,10 +275,9 @@ end
 
 function Addon:ShowOptions()
 	if LoadAddOn('Combuctor_Config') then
-		InterfaceOptionsFrame_OpenToCategory(AddonName)
+		InterfaceOptionsFrame_OpenToCategory(ADDON)
 		return true
 	end
-	return false
 end
 
 function Addon:OnSlashCommand(msg)
@@ -295,7 +307,7 @@ function Addon:GetFrame(key)
 end
 
 function Addon:Print(...)
-	return print('|cffFFBA00'.. AddonName .. '|r:', ...)
+	return print('|cffFFBA00'.. ADDON .. '|r:', ...)
 end
 
 function Addon:SetMaxItemScale(scale)

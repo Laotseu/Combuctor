@@ -21,7 +21,7 @@ L.BankTitle = "%s的银行"
 --tooltips
 L.Inventory = '整合背包'
 L.Bank = '银行'
-L.TotalOnRealm = '总计 %s'
+L.Total = '总'
 L.ClickToPurchase = '<点击> 购买'
 L.Bags = '背包'
 L.BagToggle = '<左键点击> 切换是否显示背包'
@@ -34,3 +34,8 @@ L.Trade = '商业'
 L.Ammo = '弹药'
 L.Shards = '碎片'
 L.Usable = '消耗品'
+
+--itemcount tooltips
+L.TipCount1 = '装备: %d'
+L.TipCount2 = '背包: %d'
+L.TipCount3 = '银行: %d'

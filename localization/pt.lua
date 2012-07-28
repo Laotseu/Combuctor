@@ -22,12 +22,18 @@ L.BankTitle = "Banco de %s"
 --tooltips
 L.Inventory = 'Mochila'
 L.Bank = 'Banco'
-L.TotalOnRealm = 'Total em %s'
+L.Total = 'Total'
 L.ClickToPurchase = '<Clique> para comprar'
 L.Bags = 'Sacos'
 L.BagToggle = '<Clique-esquerdo> para mostrar os sacos'
 L.InventoryToggle = '<Clique-direito> para mostrar o banco'
 L.BankToggle = '<Clique-direito> para mostrar o banco'
+
+--itemcount tooltips
+L.TipCount1 = 'Equipado: %d'
+L.TipCount2 = 'Mochila: %d'
+L.TipCount3 = 'Banco: %d'
+L.TipCount4 = 'Cofre: %d'
 
 -- options
 L.Sets = 'Conjuntos'
