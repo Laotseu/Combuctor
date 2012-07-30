@@ -38,6 +38,8 @@ elseif Class == 'HUNTER' then
 	Unusable = {{5, 6, 16}, {5, 6, 7}}
 elseif Class == 'MAGE' then
 	Unusable = {{1, 2, 3, 4, 5, 6, 7, 9, 11, 14, 15}, {3, 4, 5, 6, 7}, true}
+elseif Class == 'MONK' then
+	Unusable = {{1, 2, 3, 4, 8, 9, 14, 15, 16}, {4, 5, 6}, true}
 elseif Class == 'PALADIN' then
 	Unusable = {{3, 4, 10, 11, 13, 14, 15, 16}, {}, true}
 elseif Class == 'PRIEST' then
@@ -57,7 +59,7 @@ for class = 1, 2 do
 	for i, subclass in ipairs(Unusable[class]) do
 		Unusable[subs[subclass]] = true
 	end
-		
+
 	Unusable[class] = nil
 	subs = nil
 end
