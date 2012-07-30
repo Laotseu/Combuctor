@@ -44,7 +44,7 @@ function ItemSlot:Create()
 	border:SetBlendMode('ADD')
 	border:Hide()
 	item.border = border
-	
+
 	--add a quality border texture
 	item.questBorder = _G[item:GetName() .. 'IconQuestTexture']
 
@@ -262,25 +262,26 @@ end
 function ItemSlot:SetBorderQuality(quality)
 	local border = self.border
 	local qBorder = self.questBorder
-	
+
 	qBorder:Hide()
 	border:Hide()
 
 	if self:HighlightingQuestItems() then
 		local isQuestItem, isQuestStarter = self:IsQuestItem()
+		if isQuestStarter then
+			qBorder:SetTexture(TEXTURE_ITEM_QUEST_BANG)
+			qBorder:Show()
+			--return
+		end
+
 		if isQuestItem then
 			border:SetVertexColor(1, .82, .2,  self:GetHighlightAlpha())
 			border:Show()
 			return
 		end
 
-		if isQuestStarter then
-			qBorder:SetTexture(TEXTURE_ITEM_QUEST_BANG)
-			qBorder:Show()
-			return
-		end
 	end
-	
+
 	local link = select(7, self:GetInfo())
 	if Unfit:IsItemUnusable(link) then
 		local r, g, b = RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b
@@ -331,7 +332,7 @@ end
 
 --highlight
 function ItemSlot:Highlight(enable)
-	if enable then		
+	if enable then
 		self:LockHighlight()
 	else
 		self:UnlockHighlight()
@@ -384,22 +385,17 @@ function ItemSlot:HighlightingQuestItems()
 end
 
 function ItemSlot:GetHighlightAlpha()
-	return 0.5
+	return 0.9
 end
 
-local QUEST_ITEM_SEARCH = string.format('t:%s|%s', select(10, GetAuctionItemClasses()), 'quest')
 function ItemSlot:IsQuestItem()
 	local itemLink = self:GetItem()
 	if not itemLink then
 		return false, false
 	end
 
-	if self:IsCached() then
-		return ItemSearch:Find(itemLink, QUEST_ITEM_SEARCH), false
-	else
-		local isQuestItem, questID, isActive = GetContainerItemQuestInfo(self:GetBag(), self:GetID())
-		return isQuestItem, (questID and not isActive)
-	end
+	local isQuestItem, questID, isActive = GetContainerItemQuestInfo(self:GetBag(), self:GetID())
+	return (isQuestItem or questID), (questID and not isActive)
 end
 
 
@@ -409,7 +405,7 @@ function ItemSlot:IsTradeBagSlot()
 	return BagInfo:IsTradeBag(self:GetPlayer(), self:GetBag())
 end
 
-function ItemSlot:GetTradeSlotColor()	
+function ItemSlot:GetTradeSlotColor()
 	return 0.5, 1, 0.5
 end
 
