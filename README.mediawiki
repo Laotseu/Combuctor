@@ -1,0 +1,11 @@
+= Laotseu / Combuctor =
+
+== What is this? ==
+This is a fork of [https://github.com/tullamods/Combuctor] in order to put in some personal tweeks.
+
+== What hacks? ==
+Here's a sumery of the main changes I made to [https://github.com/tullamods/Combuctor].
+* Make sure the quest starting items show the !
+
+== Thanks ==
+Big thanks to Tuller and Jalibord for creating and maintaining this great addon.
