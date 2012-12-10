@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Unfit. If not, see <http://www.gnu.org/licenses/>.
 --]]
+local function err(msg,...) geterrorhandler()(msg:format(tostringall(...)) .. " - " .. time()) end
 
 local Lib = LibStub:NewLibrary('Unfit-1.0', 4)
 if not Lib then
@@ -28,35 +29,38 @@ end
 --[[ Data ]]--
 
 local _, Class = UnitClass('player')
-local Unusable = Lib.unusable
 
 if Class == 'DEATHKNIGHT' then
-	Unusable = {{3, 4, 10, 11, 13, 14, 15, 16}, {6}} -- weapons, armor, dual wield
+	Lib.unusable = {{3, 4, 10, 11, 13, 14, 15, 16}, {6}} -- weapons, armor, dual wield
 elseif Class == 'DRUID' then
-	Unusable = {{1, 2, 3, 4, 8, 9, 14, 15, 16}, {4, 5, 6}, true}
+	Lib.unusable = {{1, 2, 3, 4, 8, 9, 14, 15, 16}, {4, 5, 6}, true}
 elseif Class == 'HUNTER' then
-	Unusable = {{5, 6, 16}, {5, 6, 7}}
+	Lib.unusable = {{5, 6, 16}, {5, 6}}
 elseif Class == 'MAGE' then
-	Unusable = {{1, 2, 3, 4, 5, 6, 7, 9, 11, 14, 15}, {3, 4, 5, 6, 7}, true}
+	Lib.unusable = {{1, 2, 3, 4, 5, 6, 7, 9, 11, 14, 15}, {3, 4, 5, 6}, true}
 elseif Class == 'MONK' then
-	Unusable = {{2, 3, 4, 6, 9, 13, 14, 15, 16}, {4, 5, 6, 7}}
+	Lib.unusable = {{2, 3, 4, 6, 9, 13, 14, 15, 16}, {4, 5, 6}}
 elseif Class == 'PALADIN' then
-	Unusable = {{3, 4, 10, 11, 13, 14, 15, 16}, {}, true}
+	Lib.unusable = {{3, 4, 10, 11, 13, 14, 15, 16}, {}, true}
 elseif Class == 'PRIEST' then
-	Unusable = {{1, 2, 3, 4, 6, 7, 8, 9, 11, 14, 15}, {3, 4, 5, 6, 7}, true}
+	Lib.unusable = {{1, 2, 3, 4, 6, 7, 8, 9, 11, 14, 15}, {3, 4, 5, 6}, true}
 elseif Class == 'ROGUE' then
-	Unusable = {{2, 6, 7, 9, 10, 16}, {4, 5, 6, 7}}
+	Lib.unusable = {{2, 6, 7, 9, 10, 16}, {4, 5, 6}}
 elseif Class == 'SHAMAN' then
-	Unusable = {{3, 4, 7, 8, 9, 14, 15, 16}, {5}}
+	Lib.unusable = {{3, 4, 7, 8, 9, 14, 15, 16}, {5}}
 elseif Class == 'WARLOCK' then
-	Unusable = {{1, 2, 3, 4, 5, 6, 7, 9, 11, 14, 15}, {3, 4, 5, 6, 7}, true}
+	Lib.unusable = {{1, 2, 3, 4, 5, 6, 7, 9, 11, 14, 15}, {3, 4, 5, 6}, true}
 elseif Class == 'WARRIOR' then
-	Unusable = {{16}, {7}}
+	Lib.unusable = {{16}, {}}
 end
+local Unusable = Lib.unusable
 
 for class = 1, 2 do
 	local subs = {GetAuctionItemSubClasses(class)}
 	for i, subclass in ipairs(Unusable[class]) do
+		if not subclass or not subs[subclass] then
+			err("subclass = %s, class = %s, i = %s",subclass,class,i)
+		end
 		Unusable[subs[subclass]] = true
 	end
 		
@@ -64,7 +68,7 @@ for class = 1, 2 do
 	subs = nil
 end
 
-TTT = Unusable
+--TTT = Unusable
 
 
 --[[ API ]]--
